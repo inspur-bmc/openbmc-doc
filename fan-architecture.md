@@ -43,8 +43,12 @@ openbmc风扇管理主要由三个模块组成
 2. vim presence/example/config.yaml
 3. bitbake phosphor-fan
 4. scp phosphor-fan-presence-tach root@bmc:/tmp
-5. ./phosphor-fan-presence-tach &  
-6. 验证结果
+
+**bmc side**:
+
+1. phosphor-cooling-type --air  # 启动一次即可
+2. ./phosphor-fan-presence-tach &  
+3. 验证结果
 
         busctl introspect xyz.openbmc_project.Inventory.Manager \
         /xyz/openbmc_project/inventory/system/chassis/motherboard/fan0 \
@@ -52,6 +56,9 @@ openbmc风扇管理主要由三个模块组成
 
         .Present        property      b        true   emits-change    writable
         .PrettyName     property      s       "fan0"  emits-change    writable
+
+
+>>>>>>> update fan-architecture.md
        
 ### 代码结构
         
