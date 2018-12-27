@@ -2,17 +2,11 @@
 
 openbmc风扇管理主要由三个模块组成
 
-- phosphor-fan-presence-tach
+- phosphor-fan-presence-tach  检测风扇的在位状态
 
-        检测风扇的在位状态
+- phosphor-fan-monitor        监控风扇是否正常
 
-- phosphor-fan-monitor
-
-        监控风扇是否正常
-
-- phosphor-fan-control
-
-        风扇控制
+- phosphor-fan-control        风扇控制
 
 
 ## phosphor-fan-presence-tach
@@ -22,16 +16,11 @@ openbmc风扇管理主要由三个模块组成
 该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager管理的
 风扇在位信息.检测方法有两种:
 
-1. gpio
-
-        配置为[gpio-keys][2],可以参考[romulus][3]种的gpio-keys节点
+1. gpio   配置为[gpio-keys][2],可以参考[romulus][3]种的gpio-keys节点
         
-2. tach
+2. tach   一个风扇有n个转子,只要能检测到一个转子在转,就判断为在位
 
-        一个风扇有n个转子,只要能检测到一个转子在转,就判断为在位
-
-对于一个风扇,可以定义多个检测方法.phosphor-fan-presence-tach提供
-两种检测策略
+对于一个风扇,可以定义多个检测方法.phosphor-fan-presence-tach提供两种检测策略
 
 1. fallback
 
