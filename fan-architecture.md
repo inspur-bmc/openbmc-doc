@@ -35,7 +35,7 @@ phosphor-fan-control
 
 ### 配置文件
 
-        可以参考源码目录下的[example][1]
+可以参考源码目录下的[example][1]
 
 
 ### 调试方法
@@ -45,7 +45,7 @@ phosphor-fan-control
 3. bitbake phosphor-fan
 4. scp phosphor-fan-presence-tach root@bmc:/tmp
 5. ./phosphor-fan-presence-tach &  
-6. 
+6. 验证结果
         busctl introspect xyz.openbmc_project.Inventory.Manager \
         /xyz/openbmc_project/inventory/system/chassis/motherboard/fan0 \
         xyz.openbmc_project.Inventory.Item
@@ -96,7 +96,7 @@ class PolicyAccess : public T
       
 ### c++ trips
 
-        [reference_wrapper][4]
+[reference_wrapper][4]
       
 
 ## phosphor-fan-monitor
