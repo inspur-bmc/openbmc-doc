@@ -60,13 +60,40 @@ phosphor-fan-control
         RedundancyPolicy | 
                          +-----> Fallback
         
+
+伪代码
+
+```c++
+class Tach :public PresenceSensor
+{
+        ...
+        virtual RedundancyPolicy& getPolicy() = 0;
+}
+
+/**
+ * T      gpio/tach 
+ * Policy ConfigPolicy(generated.hpp)
+ */
+template <typename T, typename Policy>    
+class PolicyAccess : public T
+{
+	  /** 
+           * @brief Get the associated policy.
+           */
+          RedundancyPolicy& getPolicy() override
+          {   
+              return *Policy::get()[policy];
+          }
+
+}
+
+
+```
        
       
 c++ trips
-        reference_wrapper[5]
+        [reference_wrapper][5]
       
-
-
 
 ## phosphor-fan-monitor
 
