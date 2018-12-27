@@ -34,6 +34,7 @@ phosphor-fan-control
         所配置的检测方法中,只要其中一个认为风扇在位,即认为风扇在位
 
 ### 配置文件
+
         可以参考源码目录下的[example][1]
 
 
@@ -95,7 +96,7 @@ class PolicyAccess : public T
       
 ### c++ trips
 
-        [reference_wrapper][5]
+        [reference_wrapper][4]
       
 
 ## phosphor-fan-monitor
@@ -108,5 +109,4 @@ class PolicyAccess : public T
 [1]: https://github.com/openbmc/phosphor-fan-presence/blob/master/presence/example/example.yaml
 [2]: https://github.com/torvalds/linux/blob/master/Documentation/driver-api/gpio/drivers-on-gpio.rst
 [3]: https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
-[4]: https://github.com/openbmc/phosphor-fan-presence/blob/master/presence/example/example.yaml
-[5]: https://oopscenities.net/2012/08/09/reference_wrapper/
+[4]: https://oopscenities.net/2012/08/09/reference_wrapper/
