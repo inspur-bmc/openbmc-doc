@@ -37,13 +37,13 @@ phosphor-fan-control
 调试方法
 
 1. devtool modify phosphor-fan
-2. vim presence/example/example.yaml
+2. vim presence/example/config.yaml
 3. bitbake phosphor-fan
-4. scp phosphor-fan-prensence root@bmc:/tmp
-5. ./phosphor-fan-presencen  
+4. scp phosphor-fan-presence-tach root@bmc:/tmp
+5. ./phosphor-fan-presence-tach &  
 6. 
         busctl introspect xyz.openbmc_project.Inventory.Manager \
-        /xyz/openbmc_project/inventory/system/chassis/motherboard/fan0
+        /xyz/openbmc_project/inventory/system/chassis/motherboard/fan0 \
         xyz.openbmc_project.Inventory.Item
 
         .Present        property      b        true   emits-change    writable
