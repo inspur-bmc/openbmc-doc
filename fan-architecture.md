@@ -16,7 +16,7 @@ openbmc风扇管理主要由三个模块组成
 该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager管理的
 风扇在位信息.检测方法有两种:
 
-1. gpio   配置为[gpio-keys][2],可以参考[romulus][3]种的gpio-keys节点
+1. gpio   需配置为[gpio-keys][2],可以参考[romulus][3]中的gpio-keys节点
         
 2. tach   一个风扇有n个转子,只要能检测到一个转子在转,就判断为在位
 
