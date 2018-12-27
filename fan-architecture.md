@@ -18,7 +18,7 @@ openbmc风扇管理主要由三个模块组成
 
 1. gpio   需配置为[gpio-keys][2],可以参考[romulus][3]中的gpio-keys节点
         
-2. tach   一个风扇有n个转子,只要能检测到一个转子在转,就判断为在位
+2. tach   一个风扇有n个转子,只要能检测到有一个转子在转,就判断为在位
 
 对于一个风扇,可以定义多个检测方法.phosphor-fan-presence-tach提供两种检测策略
 
@@ -51,7 +51,7 @@ openbmc风扇管理主要由三个模块组成
         xyz.openbmc_project.Inventory.Item
 
         .Present        property      b        true   emits-change    writable
-        .PrettyName     property      s       “fan0”  emits-change    writable
+        .PrettyName     property      s       "fan0"  emits-change    writable
        
 ### 代码结构
         
@@ -59,7 +59,7 @@ openbmc风扇管理主要由三个模块组成
         PresenceSensor   |              template  | ->  PolicyAccess
                          +------> gpio ------------  
 
-                         +----->AnyOf
+                         +-----> AnyOf
         RedundancyPolicy | 
                          +-----> Fallback
         
