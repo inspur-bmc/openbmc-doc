@@ -12,11 +12,13 @@ phosphor-fan-control
 
 ## phosphor-fan-presence-tach
 
+### 概述
+
 该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager管理的
 风扇在位信息.检测方法有两种:
 
 1. gpio
-        配置为gpio-keys[2],可以参考romulus[3]种的gpio-keys节点
+        配置为[gpio-keys][2],可以参考[romulus][3]种的gpio-keys节点
         
 2. tach
         一个风扇有n个转子,只要能检测到一个转子在转,就判断为在位
@@ -31,11 +33,11 @@ phosphor-fan-control
 2. anyof
         所配置的检测方法中,只要其中一个认为风扇在位,即认为风扇在位
 
-配置文件
-        可以参考源码目录下的example[4]
+### 配置文件
+        可以参考源码目录下的[example][1]
 
 
-调试方法
+### 调试方法
 
 1. devtool modify phosphor-fan
 2. vim presence/example/config.yaml
@@ -50,7 +52,7 @@ phosphor-fan-control
         .Present        property      b        true   emits-change    writable
         .PrettyName     property      s       “fan0”  emits-change    writable
        
-代码结构
+### 代码结构
         
                        +------> tach ------------
         PresenceSensor |              template  | ->  PolicyAccess
@@ -61,7 +63,7 @@ phosphor-fan-control
                          +-----> Fallback
         
 
-伪代码
+#### 伪代码
 
 ```c++
 class Tach :public PresenceSensor
@@ -91,7 +93,8 @@ class PolicyAccess : public T
 ```
        
       
-c++ trips
+### c++ trips
+
         [reference_wrapper][5]
       
 
