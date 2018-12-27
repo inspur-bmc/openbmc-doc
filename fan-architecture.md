@@ -2,11 +2,11 @@
 
 openbmc风扇管理主要由三个模块组成
 
-phosphor-fan-presence-tach
+- phosphor-fan-presence-tach
         检测风扇的在位状态
-phosphor-fan-monitor
+- phosphor-fan-monitor
         监控风扇是否正常
-phosphor-fan-control
+- phosphor-fan-control
         风扇控制
 
 
@@ -55,9 +55,9 @@ phosphor-fan-control
        
 ### 代码结构
         
-                       +------> tach ------------
-        PresenceSensor |              template  | ->  PolicyAccess
-                       +------> gpio ------------  
+                         +------> tach ------------
+        PresenceSensor   |              template  | ->  PolicyAccess
+                         +------> gpio ------------  
 
                          +----->AnyOf
         RedundancyPolicy | 
