@@ -58,7 +58,6 @@ openbmc风扇管理主要由三个模块组成
         .PrettyName     property      s       "fan0"  emits-change    writable
 
 
->>>>>>> update fan-architecture.md
        
 ### 代码结构
         
