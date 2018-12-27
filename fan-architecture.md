@@ -12,7 +12,8 @@ phosphor-fan-control
 
 ## phosphor-fan-presence-tach
 
-该模块主要功能是检测风扇的在位状态,检测方法有两种
+该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager管理的
+风扇在位信息.检测方法有两种:
 
 1. gpio
         配置为gpio-keys[2],可以参考romulus[3]种的gpio-keys节点
@@ -49,10 +50,23 @@ phosphor-fan-control
         .Present        property      b        true   emits-change    writable
         .PrettyName     property      s       “fan0”  emits-change    writable
        
+代码结构
+        
+                       +------> tach ------------
+        PresenceSensor |              template  | ->  PolicyAccess
+                       +------> gpio ------------  
+
+                         +----->AnyOf
+        RedundancyPolicy | 
+                         +-----> Fallback
+        
        
       
+c++ trips
+        reference_wrapper[5]
+      
 
-配置文件
+
 
 ## phosphor-fan-monitor
 
@@ -65,3 +79,4 @@ phosphor-fan-control
 [2]: https://github.com/torvalds/linux/blob/master/Documentation/driver-api/gpio/drivers-on-gpio.rst
 [3]: https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
 [4]: https://github.com/openbmc/phosphor-fan-presence/blob/master/presence/example/example.yaml
+[5]: https://oopscenities.net/2012/08/09/reference_wrapper/
