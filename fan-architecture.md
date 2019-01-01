@@ -13,7 +13,8 @@ openbmc风扇管理主要由三个模块组成
 
 ### 概述
 
-该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager管理的
+该模块主要功能是检测风扇的在位状态,并更新xyz.openbmc_project.Inventory.Manager/xyz.openbmc_project.Inventory.Item下的PrettyName和Present属性信息
+
 风扇在位信息.检测方法有两种:
 
 1. gpio   需配置为[gpio-keys][2],可以参考[romulus][3]中的gpio-keys节点
@@ -25,7 +26,7 @@ openbmc风扇管理主要由三个模块组成
 1. fallback
 
         默认风扇在位,若当前活跃的检测方法(默认第一个检测方法为活跃检测方法)认为风扇不在位,只要所配置的
-        任何一个其他检测方法(x方法)认为在位,则认为当前活跃的检测方法检测结果不正确.采用x方法
+        任何一个其他检测方法(方法x)认为在位,则认为当前活跃的检测方法检测结果不正确.采用方法x
         为当前活跃检测方法.活跃检测方法只有一个
 
 2. anyof
@@ -106,6 +107,11 @@ class PolicyAccess : public T
       
 
 ## phosphor-fan-monitor
+### 概述
+该模块主要功能是检测风扇功能是否正常,并更新xyz.openbmc_project.Inventory.Manager/xyz.openbmc_project.State.Decorator.OperationalStatus下的Functional属性信息
+
+### 配置逻辑
+
 
 
 ## phosphor-fan-control
@@ -116,3 +122,6 @@ class PolicyAccess : public T
 [2]: https://github.com/torvalds/linux/blob/master/Documentation/driver-api/gpio/drivers-on-gpio.rst
 [3]: https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
 [4]: https://oopscenities.net/2012/08/09/reference_wrapper/
+
+
+[5]: https://www.quora.com/What-problem-does-std-mem_fn-solve
