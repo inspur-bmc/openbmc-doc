@@ -1,15 +1,15 @@
 # Phosphor-pid-control概述
 
 ### 基本对象
-1.Sensor  
+1. Sensor  
 ```c++
 std::map<std::string, struct conf::SensorConfig>
 ```
-2.PID对象  
+2. PID对象  
 ```c++
 std::map<int64_t, conf::PIDConf>
 ```
-3.Zone对象  
+3. Zone对象  
 ```c++
 std::map<int64_t, sturct conf::ZoneConfig>
 ```  
