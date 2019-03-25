@@ -2,17 +2,11 @@
 
 ### 基本对象
 1.Sensor  
-
-    std::map<std::string, struct conf::SensorConfig>  
-
+    ```c++ std::map<std::string, struct conf::SensorConfig>```  
 2.PID对象  
-
-    std::map<int64_t, conf::PIDConf>  
-    
+    ```c++ std::map<int64_t, conf::PIDConf>```  
 3.Zone对象  
-
-    std::map<int64_t, sturct conf::ZoneConfig>  
-    
+    ```c++ std::map<int64_t, sturct conf::ZoneConfig>```  
 ## 所有属性的获取方式
 1.通过entity-manager和dbus-sensors模块中的实现，使用DBUS接口获取所有属性值并一次存入所有对象  
 2.通过配置的json文件路径，解析json文件后，获取所有的属性值并一次存入所有对象  
@@ -28,9 +22,9 @@
 2.通过Sensor结构建立SensorManager  
 3.通过SensorManager,PID,Zone建立Zone对象  
 4.线程开启，监听xyz.openbmc_project.Hwmon.external，xyz.openbmc_project.State.FanCtrl等  
-5.遍历Zones遍历，为每个Zone开启一个线程  
+5.遍历Zones，为每个Zone开启一个线程  
 6.缓冲区初始化  
-7.线程虚幻，获取手动或自动模式，更新缓冲区中风扇传感器的值  
+7.线程循环，获取手动或自动模式，更新缓冲区中风扇传感器的值  
 8.每10次执行热控制进程  
 9.每次执行风扇传感器进程  
 ![phosphor-pid-control-2](img/phosphor-pid-control-2.jpg)
