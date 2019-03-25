@@ -20,17 +20,17 @@ std::map<int64_t, struct conf::ZoneConfig>
 1. phosphor-pid-control主要是有Sensor,Pid,Zone三个对象结构
 2. 每个Zone必须至少包含一个Pid和一个Sensor
 3. 每个Pid对象的input数组中接收的是传感器名称
-4. 每个Pid和Sensor都是通过Zone的Name属性关联
-5. 所有的Zone对象的Name属性需要单独存放在一个临时的vector缓冲区中并为每个Zone的名称生成一个唯一值index
+4. 每个Pid和Sensor都是通过Zone的name属性关联
+5. 所有的Zone对象的name属性需要单独存放在一个临时的vector缓冲区中并为每个Zone的名称生成唯一的索引值index
 ![phosphor-pid-control-1](img/phosphor-pid-control-1.jpg)
 ## Phosphor-pid-control执行流程
-1. 读取配置文件或者从DBUS接口获取数据并一次生成所有的对象(Sensor,PID,Zone)
+1. 读取json配置文件或者从DBUS接口获取数据并一次生成所有的对象(Sensor,PID,Zone)
 2. 通过Sensor结构建立SensorManager
 3. 通过SensorManager,PID,Zone建立Zone对象
 4. 线程开启，监听xyz.openbmc_project.Hwmon.external，xyz.openbmc_project.State.FanCtrl等
 5. 遍历Zones，为每个Zone开启一个线程
 6. 缓冲区初始化
 7. 线程循环，获取手动或自动模式，更新缓冲区中风扇传感器的值
-8. 每10次执行热控制进程
-9. 每次执行风扇传感器进程
+8. 每10次执行热控制进程(temp/margin/stepwise等)
+9. 每次执行风扇传感器进程(fan)
 ![phosphor-pid-control-2](img/phosphor-pid-control-2.jpg)
