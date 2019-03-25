@@ -2,7 +2,9 @@
 
 ### 基本对象
 1.Sensor  
-    ```c++ std::map<std::string, struct conf::SensorConfig>```  
+    ```c++ 
+    std::map<std::string, struct conf::SensorConfig>
+    ```  
 2.PID对象  
     ```c++ std::map<int64_t, conf::PIDConf>```  
 3.Zone对象  
