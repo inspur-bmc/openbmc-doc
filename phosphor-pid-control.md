@@ -11,7 +11,7 @@ std::map<int64_t, conf::PIDConf>
 ```
 3. Zone
 ```c++
-std::map<int64_t, sturct conf::ZoneConfig>
+std::map<int64_t, struct conf::ZoneConfig>
 ```  
 ## 所有属性的获取方式
 1. 通过entity-manager和dbus-sensors模块中的实现，使用DBUS接口获取所有属性值并一次存入所有对象  
