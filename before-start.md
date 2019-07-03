@@ -6,7 +6,7 @@ https://lists.ozlabs.org/listinfo/openbmc
 
 https://github.com/openbmc/docs
 
-##　首先要阅读的文档
+## 首先要阅读的文档
 
 https://github.com/openbmc/docs/blob/master/CONTRIBUTING.md
 
