@@ -1331,7 +1331,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
 - Set boot source:
 
   ```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}
+  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}
   ```
 ### 7.9 Set NTP and Nameserver
 
@@ -1345,15 +1345,15 @@ Examples using public server.
 * Name server:
 
   ```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["time.google.com"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/Nameservers
+  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["time.google.com"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/Nameservers
   ```
 ### 7.10 Configure time ownership and time sync method
 
 * Read:
 
   ```
-  $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-  $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
+    $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+    $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
   ```
 * Write:
 
