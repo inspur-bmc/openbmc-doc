@@ -1250,8 +1250,6 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
 
 ### 7.7 Delete images from system(异常)
 
-
-
 - Delete images from system:
 
   - Delete image:
@@ -1273,7 +1271,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
   ```
 
   ```
-  curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
+  $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
   {
   "data": [
     "/xyz/openbmc_project/software/6a70899d",
@@ -1293,38 +1291,35 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
   "message": "200 OK",
   "status": "ok"
   }
+  
+  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
+  {
+    "data": null,
+    "message": "200 OK",
+    "status": "ok"
+  }
+  
+  $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
+  {
+    "data": [
+      "/xyz/openbmc_project/software/6a70899d",
+      "/xyz/openbmc_project/software/6a70899d/inventory",
+      "/xyz/openbmc_project/software/6a70899d/software_version",
+      "/xyz/openbmc_project/software/active",
+      "/xyz/openbmc_project/software/apply_time",
+      "/xyz/openbmc_project/software/e2120de7",
+      "/xyz/openbmc_project/software/eb566212",
+      "/xyz/openbmc_project/software/fb41e6ba",
+      "/xyz/openbmc_project/software/fb41e6ba/inventory",
+      "/xyz/openbmc_project/software/fb41e6ba/software_version",
+      "/xyz/openbmc_project/software/functional"
+    ],
+    "message": "200 OK",
+    "status": "ok"
+  }
   ```
 
-curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
-{
-  "data": null,
-  "message": "200 OK",
-  "status": "ok"
-}
-
-curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
-{
-  "data": [
-    "/xyz/openbmc_project/software/6a70899d",
-    "/xyz/openbmc_project/software/6a70899d/inventory",
-    "/xyz/openbmc_project/software/6a70899d/software_version",
-    "/xyz/openbmc_project/software/active",
-    "/xyz/openbmc_project/software/apply_time",
-    "/xyz/openbmc_project/software/e2120de7",
-    "/xyz/openbmc_project/software/eb566212",
-    "/xyz/openbmc_project/software/fb41e6ba",
-    "/xyz/openbmc_project/software/fb41e6ba/inventory",
-    "/xyz/openbmc_project/software/fb41e6ba/software_version",
-    "/xyz/openbmc_project/software/functional"
-  ],
-  "message": "200 OK",
-  "status": "ok"
-}
-  ```
-
-
-
-### 7.8 Boot option(异常)
+###  7.8 Boot option(异常)
 
 属性更改成功,无法确认结果
 
@@ -1333,13 +1328,11 @@ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
   ```
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootMode -d '{"data": "xyz.openbmc_project.Control.Boot.Mode.Modes.Regular"}'
   ```
-
 - Set boot source:
 
   ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}
+$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}
   ```
-
 ### 7.9 Set NTP and Nameserver
 
 Examples using public server.
@@ -1349,13 +1342,11 @@ Examples using public server.
   ```
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["pool.ntp.org"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/NTPServers
   ```
-
 * Name server:
 
   ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["time.google.com"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/Nameservers
+$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["time.google.com"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/Nameservers
   ```
-
 ### 7.10 Configure time ownership and time sync method
 
 * Read:
@@ -1364,7 +1355,6 @@ Examples using public server.
   $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
   $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
   ```
-
 * Write:
 
   ```
@@ -1376,9 +1366,6 @@ Examples using public server.
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Split" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Both” }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
   ```
-
-
-
 ### 7.11 Update "root" password(异常)
 
 更改失败,反馈如下
@@ -1396,8 +1383,7 @@ $ curl -b cjar -k -H "Content-Type: application/json" -d "{\"data\": [\"abc123\"
   "message": "404 Not Found",
   "status": "error"
 }
-```
-
+  ```
 ### 7.12 Factory Reset
 
 - Factory reset host and BMC software:
@@ -1405,26 +1391,17 @@ $ curl -b cjar -k -H "Content-Type: application/json" -d "{\"data\": [\"abc123\"
 ```
 $ curl -b cjar -k -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/software/action/Reset
 ```
-
 - Factory reset network setting:
 
 ```
 $ curl -b cjar -k -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/network/action/Reset
 ```
-
 - Enable field mode:
 
 ```
 $ curl -b cjar -k -H 'Content-Type: application/json' -X PUT -d '{"data":1}' https://${bmc}/xyz/openbmc_project/software/attr/FieldModeEnabled
 ```
-
 and then reboot BMC.
-
-
-
-
-
-
 
 
 
@@ -1440,7 +1417,5 @@ export token=`curl -k -H "Content-Type: application/json" -X POST https://${bmc}
 curl -k -H "X-Auth-Token: $token" https://$bmc/xyz/openbmc_project/...
 
 curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -d '{"data": true}' -X PUT  https://$bmc/xyz/openbmc_project/...
-
 ```
 
-```
