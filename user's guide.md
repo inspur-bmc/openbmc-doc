@@ -302,7 +302,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 }
 ```
 
-### 1.6 Uploading images    (异常){无upload目录}
+### 1.6 Uploading images    (abnormal){No /upload object}
 
 ```
 curl -k -X GET https://root:0penBmc@${bmc}/list
@@ -512,10 +512,6 @@ or an error message:
 "status": "error"
 
 }
-
-### 1.7 Event subscription protocol(命令缺失)
-
-??命令不全
 
 ## 2  Host Management with OpenBMC
 
@@ -743,7 +739,7 @@ To connect to an OpenBMC console session remotely, just ssh to your BMC on port 
 $ ssh root@xx.xx.xx.xx -p 2200
 ```
 
-### 4.2 Local console connections (异常)(无法return)
+### 4.2 Local console connections (abnormal)(Could not return)
 
 If you're already logged into an OpenBMC machine, you can start a console session directly, using:
 
@@ -837,9 +833,9 @@ Then reboot to finish applying:
 # reboot
 ```
 
-### 5.3 Update via REST (异常)
+### 5.3 Update via REST (abnormal)
 
- (service缺失,无/org/openbmc/control/flash)
+ (No  /org/openbmc/control/flash)
 
 An OpenBMC system can download an update image from a TFTP server, and apply updates, controlled via REST.
 The general procedure is:
@@ -1248,7 +1244,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/dump/action/DeleteAll
 ```
 
-### 7.7 Delete images from system(异常)
+### 7.7 Delete images from system(abnormal)
 
 - Delete images from system:
 
@@ -1260,18 +1256,16 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
 
   - Delete all non-running images:
 
-    (仅能消除ready状态,web上未应用镜像的ready被消去,
+    (Failed to delete all not active images. Images' information remains on the Web .
 
-    删除了/xyz/openbmc_project/software/e2120de7/inventory
-
-    甚至pnor的镜像毫无作用),操作过程及反馈如下
+    The commands and feedback are as follows)
 
   ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
+$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
   ```
-
+  
   ```
-  $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
+$ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
   {
   "data": [
     "/xyz/openbmc_project/software/6a70899d",
@@ -1319,9 +1313,9 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
   }
   ```
 
-###  7.8 Boot option(异常)
+###  7.8 Boot option(abnormal)
 
-属性更改成功,无法确认结果
+Property changes were successful, but it was not known how to validate the phenomenon.
 
 - Set boot mode:
 
@@ -1366,9 +1360,9 @@ Examples using public server.
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Split" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Both” }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
   ```
-### 7.11 Update "root" password(异常)
+### 7.11 Update "root" password(abnormal)
 
-更改失败,反馈如下
+The command failed, and the feedback is as follows.
 
 Change password from "OpenBmc" to "abc123":
 
@@ -1503,7 +1497,9 @@ $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/redfish/v1/Systems
   $ curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.Reset
   ```
 
-### 8.6 Firmware ApplyTime:(异常)
+### 8.6 Firmware ApplyTime:(abnormal)
+
+(Failed)
 
 (有updateservice属性,无法更改,patch、post、put均不行)
 
@@ -1523,7 +1519,7 @@ Method Not Allowed
 
 - Firmware update:
 
-  (image file 适用 tar包)
+  Note the <image file path> shall be a tarball.
 
   ```
   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X POST -T <image file path> https://${bmc}/redfish/v1/UpdateService
@@ -1542,7 +1538,7 @@ Method Not Allowed
   }
   ```
 
-- TFTP Firmware update using TransferProtocol:(异常,无服务)
+- TFTP Firmware update using TransferProtocol:(abnormal,no service)
 
   ```
   curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"TransferProtocol":"TFTP","ImageURI":"<image file path>"}'
@@ -1550,7 +1546,7 @@ Method Not Allowed
   Not Found
   ```
 
-- TFTP Firmware update with protocol in ImageURI:(异常,无服务)
+- TFTP Firmware update with protocol in ImageURI:(abnormal,no service)
 
   ```
   curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"ImageURI":"tftp://<image file path>"}'
