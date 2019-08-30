@@ -1261,11 +1261,11 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
     The commands and feedback are as follows)
 
   ```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
+   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
   ```
   
   ```
-$ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
+    $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
   {
   "data": [
     "/xyz/openbmc_project/software/6a70899d",
