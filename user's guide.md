@@ -1218,7 +1218,7 @@ $ curl -b cjar -k -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/
 
 ## 8 Redfish cheat sheet
 
-This chapter is intended to provide a set of [Redfish][1] client commands for OpenBMC usage.
+This chapter is intended to provide a set of [Redfish][https://www.dmtf.org/standards/redfish] client commands for OpenBMC usage.
 
 (Using CURL commands)
 
