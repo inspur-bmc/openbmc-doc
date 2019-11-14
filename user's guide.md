@@ -782,6 +782,7 @@ The xyz.openbmc_project.ObjectMapper service, commonly referred to as just the m
 The mapper has two major pieces of functionality:
 
 • Methods - Provides D-Bus discovery related functionality.
+
 • Associations - Associates two different objects with each other.
 
 ### 6.1 Methods
