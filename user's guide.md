@@ -1,6 +1,6 @@
 # OpenBMC User's Guide
 
-##  1  OpenBMC REST API 
+##  1  OpenBMC REST API
 
 The primary management interface for OpenBMC is REST. This document provides some basic structure and usage examples for the REST interface. The schema for the rest interface is directly defined by the OpenBMC D-Bus structure. Therefore, the objects, attributes and methods closely map to those in the D-Bus schema.For a quick explanation of HTTP verbs and how they relate to a RESTful API, see http://www.restapitutorial.com/lessons/httpmethods.html.
 
@@ -24,9 +24,9 @@ The phosphor-rest server will no longer be the default REST server after the 2.6
   ```
   <username>:<password>@<hostname>/<path>...
   ```
-  
+
   For example:
-  
+
   ```
   $ export bmc=xx.xx.xx.xx
   $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/list
@@ -177,9 +177,6 @@ PUT operations are for updating an existing resource (an object or property), or
 
 ```
 $ curl -b cjar -k -H "X-Auth-Token: $token" https://${bmc}/xyz/openbmc_project/state/host0 > host.json
-```
-
-```
 $ cat host.json
 {
   "data": {
@@ -198,9 +195,6 @@ or
 
 ```
 $ curl -b cjar -k -H "X-Auth-Token: $token" https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition > requested_host.json
-```
-
-```
 $ cat requested_host.json
 {
   "data": "xyz.openbmc_project.State.Host.Transition.Off",
@@ -223,23 +217,13 @@ For example, make changes to the requested_host.json file and do a PUT (upload):
 
 ```
 $ cat requested_host.json
-{
-  "data": "xyz.openbmc_project.State.Host.Transition.Off",
-  "message": "200 OK",
-  "status": "ok"
-}  
+{"data": "xyz.openbmc_project.State.Host.Transition.Off"}
+$ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -T requested_host.json https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition
 ```
-
-```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -T requested_host.json https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition
-```
-
 Alternatively specify the json inline with -d:
-
 ```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": "xyz.openbmc_project.State.Host.Transition.On"}' https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition
+$ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": "xyz.openbmc_project.State.Host.Transition.On"}' https://${bmc}/xyz/openbmc_project/state/host0/attr/RequestedHostTransition
 ```
-
 When using '-d' just remember that json requires quoting.
 
 ### 1.4 HTTP POST operations
@@ -302,177 +286,16 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 }
 ```
 
-### 1.6 Uploading images    (abnormal){No /upload object}
+### 1.6 Uploading images
+
+It is possible to upload software upgrade images (for example to upgrade the BMC
+or host software) via REST. The content-type should be set to
+"application/octet-stream".
+
+For example, to upload an image:(the `<file_to_upload>` must be a tar ball)
 
 ```
-curl -k -X GET https://root:0penBmc@${bmc}/list
-{
-  "data": [
-    "/",
-    "/org",
-    "/org/open_power",
-    "/org/open_power/control",
-    "/org/open_power/control/gard",
-    "/org/open_power/control/host0",
-    "/org/open_power/control/occ0",
-    "/org/open_power/control/occ1",
-    "/org/open_power/control/volatile",
-    "/org/openbmc",
-    "/org/openbmc/HostIpmi",
-    "/org/openbmc/HostIpmi/1",
-    "/org/openbmc/control",
-    "/org/openbmc/control/power0",
-    "/org/openbmc/mboxd",
-    "/xyz",
-    "/xyz/openbmc_project",
-    "/xyz/openbmc_project/Chassis",
-    "/xyz/openbmc_project/Chassis/Buttons",
-    "/xyz/openbmc_project/Chassis/Buttons/Power0",
-    "/xyz/openbmc_project/Chassis/Buttons/Reset0",
-    "/xyz/openbmc_project/Hiomapd",
-    "/xyz/openbmc_project/Ipmi",
-    "/xyz/openbmc_project/certs",
-    "/xyz/openbmc_project/certs/authority",
-    "/xyz/openbmc_project/certs/authority/ldap",
-    "/xyz/openbmc_project/certs/client",
-    "/xyz/openbmc_project/certs/client/ldap",
-    "/xyz/openbmc_project/certs/server",
-    "/xyz/openbmc_project/certs/server/https",
-    "/xyz/openbmc_project/console",
-    "/xyz/openbmc_project/control",
-    "/xyz/openbmc_project/control/host0",
-    "/xyz/openbmc_project/control/host0/TPMEnable",
-    "/xyz/openbmc_project/control/host0/auto_reboot",
-    "/xyz/openbmc_project/control/host0/boot",
-    "/xyz/openbmc_project/control/host0/boot/one_time",
-    "/xyz/openbmc_project/control/host0/power_cap",
-    "/xyz/openbmc_project/control/host0/power_restore_policy",
-    "/xyz/openbmc_project/control/host0/restriction_mode",
-    "/xyz/openbmc_project/control/host0/turbo_allowed",
-    "/xyz/openbmc_project/control/minimum_ship_level_required",
-    "/xyz/openbmc_project/control/power_supply_attributes",
-    "/xyz/openbmc_project/control/power_supply_redundancy",
-    "/xyz/openbmc_project/dump",
-    "/xyz/openbmc_project/dump/internal",
-    "/xyz/openbmc_project/dump/internal/manager",
-    "/xyz/openbmc_project/events",
-    "/xyz/openbmc_project/inventory",
-    "/xyz/openbmc_project/inventory/system",
-    "/xyz/openbmc_project/inventory/system/chassis",
-    "/xyz/openbmc_project/inventory/system/chassis/activation",
-    "/xyz/openbmc_project/ipmi",
-    "/xyz/openbmc_project/ipmi/session",
-    "/xyz/openbmc_project/ipmi/session/eth1",
-    "/xyz/openbmc_project/ipmi/session/eth1/0",
-    "/xyz/openbmc_project/led",
-    "/xyz/openbmc_project/led/groups",
-    "/xyz/openbmc_project/led/groups/bmc_booted",
-    "/xyz/openbmc_project/led/groups/enclosure_fault",
-    "/xyz/openbmc_project/led/groups/enclosure_identify",
-    "/xyz/openbmc_project/led/groups/fan_fault",
-    "/xyz/openbmc_project/led/groups/fan_identify",
-    "/xyz/openbmc_project/led/groups/power_on",
-    "/xyz/openbmc_project/led/physical",
-    "/xyz/openbmc_project/led/physical/power",
-    "/xyz/openbmc_project/logging",
-    "/xyz/openbmc_project/logging/config",
-    "/xyz/openbmc_project/logging/config/remote",
-    "/xyz/openbmc_project/logging/internal",
-    "/xyz/openbmc_project/logging/internal/manager",
-    "/xyz/openbmc_project/logging/rest_api_logs",
-    "/xyz/openbmc_project/network",
-    "/xyz/openbmc_project/network/config",
-    "/xyz/openbmc_project/network/config/dhcp",
-    "/xyz/openbmc_project/network/eth0",
-    "/xyz/openbmc_project/network/eth0/ipv4",
-    "/xyz/openbmc_project/network/eth0/ipv4/bcb6b236",
-    "/xyz/openbmc_project/network/eth0/ipv6",
-    "/xyz/openbmc_project/network/eth0/ipv6/50fad4ec",
-    "/xyz/openbmc_project/network/eth1",
-    "/xyz/openbmc_project/network/eth1/ipv4",
-    "/xyz/openbmc_project/network/eth1/ipv4/5405a73e",
-    "/xyz/openbmc_project/network/eth1/ipv6",
-    "/xyz/openbmc_project/network/eth1/ipv6/1de17e7e",
-    "/xyz/openbmc_project/network/host0",
-    "/xyz/openbmc_project/network/host0/intf",
-    "/xyz/openbmc_project/network/host0/intf/addr",
-    "/xyz/openbmc_project/network/sit0",
-    "/xyz/openbmc_project/network/sit0/ipv6",
-    "/xyz/openbmc_project/network/sit0/ipv6/68931764",
-    "/xyz/openbmc_project/network/snmp",
-    "/xyz/openbmc_project/network/snmp/manager",
-    "/xyz/openbmc_project/object_mapper",
-    "/xyz/openbmc_project/sensors",
-    "/xyz/openbmc_project/sensors/fan_tach",
-    "/xyz/openbmc_project/sensors/fan_tach/fan0_0",
-    "/xyz/openbmc_project/sensors/fan_tach/fan0_1",
-    "/xyz/openbmc_project/sensors/fan_tach/fan1_0",
-    "/xyz/openbmc_project/sensors/fan_tach/fan1_1",
-    "/xyz/openbmc_project/sensors/fan_tach/fan2_0",
-    "/xyz/openbmc_project/sensors/fan_tach/fan2_1",
-    "/xyz/openbmc_project/sensors/fan_tach/fan3_0",
-    "/xyz/openbmc_project/sensors/fan_tach/fan3_1",
-    "/xyz/openbmc_project/sensors/temperature",
-    "/xyz/openbmc_project/sensors/temperature/bmc_zone",
-    "/xyz/openbmc_project/sensors/temperature/ocp_zone",
-    "/xyz/openbmc_project/sensors/temperature/outlet",
-    "/xyz/openbmc_project/sensors/temperature/psu_inlet",
-    "/xyz/openbmc_project/sensors/voltage",
-    "/xyz/openbmc_project/sensors/voltage/P12V",
-    "/xyz/openbmc_project/sensors/voltage/P3V3",
-    "/xyz/openbmc_project/sensors/voltage/P5V",
-    "/xyz/openbmc_project/sensors/voltage/PVCS_CPU0",
-    "/xyz/openbmc_project/sensors/voltage/PVCS_CPU1",
-    "/xyz/openbmc_project/sensors/voltage/PVDDQ_CPU0_CH01",
-    "/xyz/openbmc_project/sensors/voltage/PVDDQ_CPU0_CH67",
-    "/xyz/openbmc_project/sensors/voltage/PVDDQ_CPU1_CH01",
-    "/xyz/openbmc_project/sensors/voltage/PVDDQ_CPU1_CH67",
-    "/xyz/openbmc_project/sensors/voltage/PVDD_CPU0",
-    "/xyz/openbmc_project/sensors/voltage/PVDD_CPU1",
-    "/xyz/openbmc_project/sensors/voltage/PVDN_CPU0",
-    "/xyz/openbmc_project/sensors/voltage/PVDN_CPU1",
-    "/xyz/openbmc_project/sensors/voltage/PVIO_CPU0",
-    "/xyz/openbmc_project/sensors/voltage/PVIO_CPU1",
-    "/xyz/openbmc_project/sensors/voltage/p3v_bat",
-    "/xyz/openbmc_project/software",
-    "/xyz/openbmc_project/software/393ee7b0",
-    "/xyz/openbmc_project/software/393ee7b0/software_version",
-    "/xyz/openbmc_project/software/active",
-    "/xyz/openbmc_project/software/apply_time",
-    "/xyz/openbmc_project/software/fb41e6ba",
-    "/xyz/openbmc_project/software/fb41e6ba/inventory",
-    "/xyz/openbmc_project/software/fb41e6ba/software_version",
-    "/xyz/openbmc_project/software/functional",
-    "/xyz/openbmc_project/state",
-    "/xyz/openbmc_project/state/bmc0",
-    "/xyz/openbmc_project/state/chassis0",
-    "/xyz/openbmc_project/state/host0",
-    "/xyz/openbmc_project/time",
-    "/xyz/openbmc_project/time/bmc",
-    "/xyz/openbmc_project/time/host",
-    "/xyz/openbmc_project/time/owner",
-    "/xyz/openbmc_project/time/sync_method",
-    "/xyz/openbmc_project/user",
-    "/xyz/openbmc_project/user/ldap",
-    "/xyz/openbmc_project/user/ldap/active_directory",
-    "/xyz/openbmc_project/user/ldap/openldap",
-    "/xyz/openbmc_project/user/root"
-  ],
-  "message": "200 OK",
-  "status": "ok"
-
-```
-
-
-
-
-
-It is possible to upload software upgrade images (for example to upgrade the BMC or host software) via REST. The content-type should be set to "application/octet-stream".
-
-For example, to upload an image:
-
-```
-$ curl -c cjar -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X POST -T <file_to_upload> https://${bmc}/upload/image
+$ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X POST -T <file_to_upload> https://${bmc}/upload/image
 ```
 
 In above example, the filename on the BMC will be chosen by the REST server.
@@ -480,38 +303,35 @@ In above example, the filename on the BMC will be chosen by the REST server.
 It is possible for the user to choose the uploaded file's remote name:
 
 ```
-$ curl -c cjar -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X PUT -T foo https://${bmc}/upload/image/bar
+curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X PUT -T foo https://${bmc}/upload/image/bar
 ```
 
-In above example, the file "foo" will be saved with the name "bar" on the BMC.
+In above example, the file foo will be saved with the name bar on the BMC.
 
 The operation will either return the version id (hash) of the uploaded file on success:
 
+```
 {
-
-"data": "ffdaab9b",
-
-"message": "200 OK",
-
-"status": "ok"
-
+  "data": "afb92384",
+  "message": "200 OK",
+  "status": "ok"
 }
+```
 
-or an error message:
+or an error message
 
+```
 {
-
-"data": {
-
-"description": "Version already exists or failed to be extracted"
-
-},
-
-"message": "400 Bad Request",
-
-"status": "error"
-
+    "data": {
+        "description": "Version already exists or failed to be extracted"
+    },
+    "message": "400 Bad Request",
+    "status": "error"
 }
+```
+
+For more details on uploading and updating software, see:
+https://github.com/openbmc/docs/tree/master/code-update
 
 ## 2  Host Management with OpenBMC
 
@@ -520,7 +340,7 @@ This document describes the host-management interfaces of the OpenBMC object str
 ### 2.1 Inventory
 
 The system inventory structure is under the /xyz/openbmc_project/inventory hierarchy.
-In OpenBMC the inventory is represented as a path which is hierarchical to the physical system topology. Items in the inventory are referred to as inventory items and are not necessarily FRUs (field-replaceable units). If the system contains one chassis, a motherboard, and a CPU on the motherboard, then the path to that inventory item would be: 
+In OpenBMC the inventory is represented as a path which is hierarchical to the physical system topology. Items in the inventory are referred to as inventory items and are not necessarily FRUs (field-replaceable units). If the system contains one chassis, a motherboard, and a CPU on the motherboard, then the path to that inventory item would be:
 
 inventory/system/chassis0/motherboard0/cpu0
 
@@ -678,13 +498,23 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 
 ### 2.4 Host Boot Options
 
-With OpenBMC, the Host boot options are stored as D-Bus properties under the control/host0/boot path. Properties include 
-
-https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/Control/Boot/Mode.interface.yaml
-
+With OpenBMC, the Host boot options are stored as D-Bus properties under the
+`control/host0/boot` path. Properties include
+[`BootMode`](https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/Control/Boot/Mode.interface.yaml)
 and
+[`BootSource`](https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/Control/Boot/Source.interface.yaml).
 
- https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/Control/Boot/Source.interface.yaml.
+ * Set boot mode:
+
+   ```
+    $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootMode -d '{"data": "xyz.openbmc_project.Control.Boot.Mode.Modes.Regular"}'
+   ```
+
+ * Set boot source:
+
+    ```
+    $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}'
+    ```
 
 ### 2.5 Host State Control
 
@@ -716,13 +546,28 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 
 More information about Host State Management can be found here: https://github.com/openbmc/phosphor-dbus-interfaces/tree/master/xyz/openbmc_project/State
 
-## 3  Host Clear GARD
+### 2.6  Host Clear GARD
 
-On OpenPOWER systems, the host maintains a record of bad or non-working components on the GARD partition. This record is referenced by the host on subsequent boots to determine which parts should be ignored.
+On OpenPOWER systems, the host maintains a record of bad or non-working
+components on the GARD partition. This record is referenced by the host on
+subsequent boots to determine which parts should be ignored.
 
-```
-$ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data":[]}' https://${bmc}/org/open_power/control/gard/action/Reset 
-```
+The BMC implements a function that simply clears this partition. This function
+can be called as follows:
+
+  * Method 1: From the BMC command line:
+
+      ```
+      busctl call org.open_power.Software.Host.Updater \
+        /org/open_power/control/gard \
+        xyz.openbmc_project.Common.FactoryReset Reset
+      ```
+
+  * Method 2: Using the REST API:
+
+      ```
+      $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data":[]}' https://${bmc}/org/open_power/control/gard/action/Reset
+      ```
 
 Implementation: https://github.com/openbmc/openpower-pnor-code-mgmt
 
@@ -739,25 +584,33 @@ To connect to an OpenBMC console session remotely, just ssh to your BMC on port 
 $ ssh root@xx.xx.xx.xx -p 2200
 ```
 
-### 4.2 Local console connections (abnormal)(Could not return)
+### 4.2 Local console connections
 
-If you're already logged into an OpenBMC machine, you can start a console session directly, using:
+If you're already logged into an OpenBMC machine, you can start a console
+session directly, using:
 
-```
-$ obmc-console-client
-```
+    $ obmc-console-client
 
 To exit from a console, type:
 
-return ~ 
+    return ~ .
 
-Note that if you're on an ssh connection, you'll need to 'escape' the ~ character, by entering it twice.
+Note that if you're on an ssh connection, you'll need to 'escape' the ~
+character, by entering it twice:
+
+    return ~ ~ .
+
+This is because obmc-console-client is an ssh session, and a double `~` is
+required to escape the "inner" (obmc-console-client) ssh session.
+
 
 ### 4.3 Logging
 
 Console logs are kept in:
 
+```
 /var/log/obmc-console.log
+```
 
 This log is limited in size, and will wrap after hitting that limit (currently set at 16kB).
 
@@ -819,7 +672,7 @@ As an alternative, an option can be parsed by the init script in the initramfs t
 
 To update from the OpenBMC shell, follow the steps in this section.
 
-Firstly, use scp command copy the image-bmc file to directory  /run/initramfs  : 
+Firstly, use scp command copy the image-bmc file to directory  /run/initramfs  :
 
 (The "image-bmc" is soft-link to the image "obmc-phosphor-image-xxxxxx-xxxxxxxx.static.mtd")
 
@@ -833,9 +686,9 @@ Then reboot to finish applying:
 # reboot
 ```
 
-### 5.3 Update via REST (abnormal)
+### 5.3 Update via REST (异常)
 
- (No  /org/openbmc/control/flash)
+ (service缺失,无/org/openbmc/control/flash)
 
 An OpenBMC system can download an update image from a TFTP server, and apply updates, controlled via REST.
 The general procedure is:
@@ -879,8 +732,6 @@ curl -b cjar -k -H "Content-Type: application/json" -X PUT \
 https://${bmc}/org/openbmc/control/flash/bmc/attr/preserve_network_settings
 ```
 
-
-
 #### 5.3.3 Initiate update
 
 Perform a POST to invoke the updateViaTftp method of the /flash/bmc object:
@@ -892,8 +743,6 @@ https://${bmc}/org/openbmc/control/flash/bmc/action/updateViaTftp
 ```
 
 Note the <filename> shall be a tarball.
-
-
 
 #### 5.3.4 Check flash status
 
@@ -908,8 +757,6 @@ Note:
 • During downloading the tarball, the progress status is Downloading
 • After the tarball is downloaded and verified, the progress status becomes Image ready to apply.
 
-
-
 #### 5.3.5 Apply update
 
 If the status is Image ready to apply. then you can either initiate a reboot or call the Apply method to start the process of writing the flash:
@@ -919,8 +766,6 @@ https://${bmc}/org/openbmc/control/flash/bmc/action/Apply
 Now the image is being flashed, you can check the progress with above step s command as well.
 • During flashing the image, the status becomes Writing images to flash
 • After it’s flashed and verified, the status becomes Apply Complete. Reboot to take effect.
-
-
 
 #### 5.3.6 Reboot the BMC
 
@@ -937,14 +782,13 @@ The xyz.openbmc_project.ObjectMapper service, commonly referred to as just the m
 The mapper has two major pieces of functionality:
 
 • Methods - Provides D-Bus discovery related functionality.
-
 • Associations - Associates two different objects with each other.
 
-### 6.1 Methods 
+### 6.1 Methods
 
-The official YAML interface definition can be found here : https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/ObjectMapper.interface.yaml 
+The official YAML interface definition can be found here : https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/xyz/openbmc_project/ObjectMapper.interface.yaml
 
-#### 6.1.1 GetObject 
+#### 6.1.1 GetObject
 
 Use this method to find the services, with their interfaces, that implement a certain object path. The output is a map of service names to their implemented interfaces. An optional list of interfaces may also be passed in to constrain the output to services that implement those specific interfaces.
 
@@ -984,7 +828,7 @@ Inputs: - param: subtree - the root of the tree. Using “/” will search the w
 Output: - Map of object paths to a map of service names to their interfaces
 
 ```
-# dbus-send --system --print-reply --dest=xyz.openbmc_project.ObjectMapper /xyz/openbmc_project/object_mapper xyz.openbmc_project.ObjectMapper.GetSubTree 
+# dbus-send --system --print-reply --dest=xyz.openbmc_project.ObjectMapper /xyz/openbmc_project/object_mapper xyz.openbmc_project.ObjectMapper.GetSubTree
 string:"/" int32:0 array:string:"xyz.openbmc_project.Sensor.Threshold.Warning"
 
 method return time=1563250227.478618 sender=:1.21 -> destination=:1.100 serial=813 reply_serial=2
@@ -1067,7 +911,7 @@ method return time=1563250589.501451 sender=:1.21 -> destination=:1.101 serial=8
 
 **Example Use Case**  Find all object paths that implement a specific interface.
 
-#### 6.1.4  GetAncestors 
+#### 6.1.4  GetAncestors
 
 Use this method to find all ancestors of an object that implement a specific interface. If no interfaces are passed in, then all ancestor paths/services/interfaces are returned.
 
@@ -1191,7 +1035,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" https://${bmc}/xyz/openbmc_project/
 $ curl -b cjar -k -H "X-Auth-Token: $token" https://${bmc}/xyz/openbmc_project/state/
 ```
 
-### 7.3 Host power 
+### 7.3 Host power
 
 - Host soft power off:
 
@@ -1245,7 +1089,7 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" 
 $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/dump/action/DeleteAll
 ```
 
-### 7.7 Delete images from system(abnormal)
+### 7.7 Delete images from system
 
 - Delete images from system:
 
@@ -1257,66 +1101,12 @@ $ curl -b cjar -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' 
 
   - Delete all non-running images:
 
-    (Failed to delete all not active images. Images' information remains on the Web .
-
-    The commands and feedback are as follows)
-
-  ```
+   ```
    $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
-  ```
-  
-  ```
-    $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
-  {
-  "data": [
-    "/xyz/openbmc_project/software/6a70899d",
-    "/xyz/openbmc_project/software/6a70899d/inventory",
-    "/xyz/openbmc_project/software/6a70899d/software_version",
-    "/xyz/openbmc_project/software/active",
-    "/xyz/openbmc_project/software/apply_time",
-    "/xyz/openbmc_project/software/e2120de7",                                  ##bmc镜像一                                         
-    "/xyz/openbmc_project/software/e2120de7/inventory",
-    "/xyz/openbmc_project/software/eb566212",                                  ##bmc镜像二                                                         
-    "/xyz/openbmc_project/software/eb566212/inventory",
-    "/xyz/openbmc_project/software/fb41e6ba",
-    "/xyz/openbmc_project/software/fb41e6ba/inventory",
-    "/xyz/openbmc_project/software/fb41e6ba/software_version",
-    "/xyz/openbmc_project/software/functional"
-  ],
-  "message": "200 OK",
-  "status": "ok"
-  }
-  
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X POST -d '{"data": []}' https://${bmc}/xyz/openbmc_project/software/action/DeleteAll
-  {
-    "data": null,
-    "message": "200 OK",
-    "status": "ok"
-  }
-  
-  $ curl -k -X GET https://root:0penBmc@${bmc}/xyz/openbmc_project/software/list
-  {
-    "data": [
-      "/xyz/openbmc_project/software/6a70899d",
-      "/xyz/openbmc_project/software/6a70899d/inventory",
-      "/xyz/openbmc_project/software/6a70899d/software_version",
-      "/xyz/openbmc_project/software/active",
-      "/xyz/openbmc_project/software/apply_time",
-      "/xyz/openbmc_project/software/e2120de7",
-      "/xyz/openbmc_project/software/eb566212",
-      "/xyz/openbmc_project/software/fb41e6ba",
-      "/xyz/openbmc_project/software/fb41e6ba/inventory",
-      "/xyz/openbmc_project/software/fb41e6ba/software_version",
-      "/xyz/openbmc_project/software/functional"
-    ],
-    "message": "200 OK",
-    "status": "ok"
-  }
-  ```
+   ```
 
-###  7.8 Boot option(abnormal)
 
-Property changes were successful, but it was not known how to validate the phenomenon.
+###  7.8 Boot option
 
 - Set boot mode:
 
@@ -1326,7 +1116,7 @@ Property changes were successful, but it was not known how to validate the pheno
 - Set boot source:
 
   ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}
+  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/host0/boot/one_time/attr/BootSource -d '{"data": "xyz.openbmc_project.Control.Boot.Source.Sources.Default"}'
   ```
 ### 7.9 Set NTP and Nameserver
 
@@ -1335,68 +1125,95 @@ Examples using public server.
 * NTP server:
 
   ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["pool.ntp.org"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/NTPServers
+  $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["pool.ntp.org"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/NTPServers
   ```
 * Name server:
 
   ```
   $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X PUT -d '{"data": ["time.google.com"] }' https://${bmc}/xyz/openbmc_project/network/eth0/attr/Nameservers
   ```
+
+### 7.13 Power Supply Redundancy:(保留与否)
+
+- Read:
+
+```
+$ curl -b cjar -k -H "Content-Type: application/json" -X POST https://${bmc}/xyz/openbmc_project/sensors/chassis/PowerSupplyRedundancy/action/getValue -d '{"data": []}'
+```
+
+or
+
+```
+$ curl -b cjar -k -X GET https://${bmc}/xyz/openbmc_project/control/power_supply_redundancy
+```
+
+- Write (Enable/Disable):
+
+```
+$ curl -b cjar -k -H "Content-Type: application/json" -X POST https://${bmc}/xyz/openbmc_project/sensors/chassis/PowerSupplyRedundancy/action/setValue -d '{"data": ["Enabled"]}'
+
+$ curl -b cjar -k -H "Content-Type: application/json" -X POST https://${bmc}/xyz/openbmc_project/sensors/chassis/PowerSupplyRedundancy/action/setValue -d '{"data": ["Disabled"]}'
+```
+
+or
+
+```
+$ curl -b cjar -k -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/power_supply_redundancy/attr/PowerSupplyRedundancyEnabled -d '{"data": 1}'
+$ curl -b cjar -k -H "Content-Type: application/json" -X PUT https://${bmc}/xyz/openbmc_project/control/power_supply_redundancy/attr/PowerSupplyRedundancyEnabled -d '{"data": 0}'
+```
+
 ### 7.10 Configure time ownership and time sync method
 
-* Read:
+   The introduction about time setting is here:
+   https://github.com/openbmc/phosphor-time-manager
 
-  ```
-    $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-    $ curl -b cjar -k -X -H "X-Auth-Token: $token" GET https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
-  ```
-* Write:
+   Note: Starting from OpenBMC 2.6 (with systemd v239), systemd's timedated introduces a new beahvior that it checks the NTP services' status during setting time, instead of checking the NTP setting:
 
-  ```
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Synchronization.Method.NTP" }' https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Synchronization.Method.Manual" }' https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
+   -When NTP server is set to disabled, and the NTP service is stopping but not stopped, setting time will get an error.
 
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.BMC" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Host” }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Split" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-  $ curl -b cjar -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Both” }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
-  ```
-### 7.11 Update "root" password(abnormal)
+   Before OpenBMC 2.4 (with systemd v236), the above will always succeed.
+   This results in [openbmc/openbmc#3459](https://github.com/openbmc/openbmc/issues/3459), and the related test cases are updated to cooperate with this behavior change.
 
-The command failed, and the feedback is as follows.
+   * Read:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+   $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
+   ```
 
-Change password from "OpenBmc" to "abc123":
+   * Write:
 
-  ```
-$ curl -c cjar -b cjar -k -H "Content-Type: application/json" -X POST https://${bmc}/login -d "{\"data\": [ \"root\", \"0penBmc\" ] }"
-$ curl -b cjar -k -H "Content-Type: application/json" -d "{\"data\": [\"abc123\"] }" -X POST  https://${bmc}/xyz/openbmc_project/user/root/action/SetPassword
+   Time owner:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.BMC" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Host" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Split" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Owner.Owners.Both" }' https://${bmc}/xyz/openbmc_project/time/owner/attr/TimeOwner
+   ```
 
-{
-  "data": {
-    "description": "The specified method cannot be found"
-  },
-  "message": "404 Not Found",
-  "status": "error"
-}
-  ```
+   Time sync method:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Synchronization.Method.NTP" }' https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
+   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/json" -X  PUT -d '{"data": "xyz.openbmc_project.Time.Synchronization.Method.Manual" }' https://${bmc}/xyz/openbmc_project/time/sync_method/attr/TimeSyncMethod
+   ```
+
+
 ### 7.12 Factory Reset
 
 - Factory reset host and BMC software:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/software/action/Reset
+   ```
 
-```
-$ curl -b cjar -k -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/software/action/Reset
-```
 - Factory reset network setting:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/network/action/Reset
+   ```
 
-```
-$ curl -b cjar -k -H 'Content-Type: application/json' -X POST -d '{"data":[]}' https://${bmc}/xyz/openbmc_project/network/action/Reset
-```
 - Enable field mode:
-
-```
-$ curl -b cjar -k -H 'Content-Type: application/json' -X PUT -d '{"data":1}' https://${bmc}/xyz/openbmc_project/software/attr/FieldModeEnabled
-```
-and then reboot BMC.
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -H 'Content-Type: application/json' -X PUT -d '{"data":1}' https://${bmc}/xyz/openbmc_project/software/attr/FieldModeEnabled
+   ```
+    and then reboot BMC.
 
 ## 8 Redfish cheat sheet
 
@@ -1459,7 +1276,7 @@ $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/redfish/v1/Systems
 
   ```
   $ curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/Systems/system/Actions/ComputerSystem.Reset -d '{"ResetType": "GracefulRestart"}'
-  
+
   ```
 
 ### 8.5 Log entry
@@ -1468,7 +1285,7 @@ $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/redfish/v1/Systems
 
   ```
   $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/redfish/v1/Systems/system/LogServices/EventLog/Entries
-  
+
   {
     "@odata.context": "/redfish/v1/$metadata#LogEntryCollection.LogEntryCollection",
     "@odata.id": "/redfish/v1/Systems/system/LogServices/EventLog/Entries",
@@ -1498,33 +1315,51 @@ $ curl -k -H "X-Auth-Token: $token" -X GET https://${bmc}/redfish/v1/Systems
   $ curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/Systems/system/LogServices/EventLog/Actions/LogService.Reset
   ```
 
-### 8.6 Firmware ApplyTime:(abnormal)
+### 8.6 Firmware ApplyTime:
 
-(Failed)
-
-(有updateservice属性,无法更改,patch、post、put均不行)
-
-```
+   ```
 $ curl -k -H "X-Auth-Token: $token" -X PATCH -d '{ "ApplyTime":"Immediate"}' https://${bmc}/redfish/v1/UpdateService
+{
+  "@Message.ExtendedInfo": [
+    {
+      "@odata.type": "/redfish/v1/$metadata#Message.v1_0_0.Message",
+      "Message": "Successfully Completed Request",
+      "MessageArgs": [],
+      "MessageId": "Base.1.4.0.Success",
+      "Resolution": "None",
+      "Severity": "OK"
+    }
+  ]
+}
+   ```
 
-Method Not Allowed
-```
+or
 
 ```
 $ curl -k -H "X-Auth-Token: $token" -X PATCH -d '{ "ApplyTime":"OnReset"}' https://${bmc}/redfish/v1/UpdateService
-
-Method Not Allowed
+{
+  "@Message.ExtendedInfo": [
+    {
+      "@odata.type": "/redfish/v1/$metadata#Message.v1_0_0.Message",
+      "Message": "Successfully Completed Request",
+      "MessageArgs": [],
+      "MessageId": "Base.1.4.0.Success",
+      "Resolution": "None",
+      "Severity": "OK"
+    }
+  ]
+}
 ```
 
 ### 8.7 Firmware update
 
 - Firmware update:
 
-  Note the <image file path> shall be a tarball.
+  (image file 适用 tar包)
 
   ```
   $ curl -k -H "X-Auth-Token: $token" -H "Content-Type: application/octet-stream" -X POST -T <image file path> https://${bmc}/redfish/v1/UpdateService
-  
+
   {
     "@Message.ExtendedInfo": [
       {
@@ -1539,19 +1374,44 @@ Method Not Allowed
   }
   ```
 
-- TFTP Firmware update using TransferProtocol:(abnormal,no service)
+- TFTP Firmware update using TransferProtocol:
+  Note: The `<image file path>` contains the address of the TFTP service: `xx.xx.xx.xx/obmc-phosphor-xxxxx-xxxxxxxxx.static.mtd.tar`
 
-  ```
-  curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"TransferProtocol":"TFTP","ImageURI":"<image file path>"}'
-  
-  Not Found
-  ```
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"TransferProtocol":"TFTP","ImageURI":"<image file path>"}'
+   {
+    "@Message.ExtendedInfo": [
+      {
+        "@odata.type": "/redfish/v1/$metadata#Message.v1_0_0.Message",
+        "Message": "Successfully Completed Request",
+        "MessageArgs": [],
+        "MessageId": "Base.1.4.0.Success",
+        "Resolution": "None",
+        "Severity": "OK"
+       }
+     ]
+   }
+   ```
+- TFTP Firmware update with protocol in ImageURI:
+   ```
+   $ curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"ImageURI":"tftp://<image file path>"}'
+   {
+     "@Message.ExtendedInfo": [
+      {
+      "@odata.type": "/redfish/v1/$metadata#Message.v1_0_0.Message",
+      "Message": "Successfully Completed Request",
+      "MessageArgs": [],
+      "MessageId": "Base.1.4.0.Success",
+      "Resolution": "None",
+      "Severity": "OK"
+       }
+     ]
+   }
+   ```
 
-- TFTP Firmware update with protocol in ImageURI:(abnormal,no service)
+### 8.8 Update "root" password
+Change password to "0penBmc1":
 
-  ```
-  curl -k -H "X-Auth-Token: $token" -X POST https://${bmc}/redfish/v1/UpdateService/Actions/UpdateService.SimpleUpdate -d '{"ImageURI":"tftp://<image file path>"}'
-  
-  Not Found
-  ```
-
+```
+$ curl -k -H "X-Auth-Token: $token" -X PATCH -d '{"Password": "0penBmc1"}' https://${bmc}/redfish/v1/AccountService/Accounts/root
+```
